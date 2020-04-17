@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.util.Log;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
@@ -40,6 +41,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 unused) {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+
+        float[] orientationAngles = MainActivity.getOrientationAngles();
+        float pitch = (float) Math.toDegrees(orientationAngles[1]);
+        float roll = (float) Math.toDegrees(orientationAngles[2]);
+
+        Log.i("render", "pitch: " + pitch + " roll: " + roll);
+
+        Matrix.rotateM(viewMatrix, 0, pitch, 1.0f, 0.0f, 0.0f);
+        Matrix.rotateM(viewMatrix, 0, roll, 0.0f, 1.0f, 0.0f);
 
         // Set the camera position (View matrix)
         Matrix.setLookAtM(viewMatrix, 0, 0, 0, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
