@@ -1,4 +1,4 @@
-package com.example.assignment_2;
+package com.example.part2;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -6,10 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 import android.util.Log;
-
-import java.util.Arrays;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
@@ -19,6 +16,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] vPMatrix = new float[16];
     private final float[] projectionMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
+
+    private long count = 0;
 
     public static int loadShader(int type, String shaderCode){
 
@@ -45,23 +44,22 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        float[] orientationAngles = MainActivity.getOrientationAngles();
-        float pitch = (float) Math.toDegrees(orientationAngles[1] + (Math.PI/2));
-        float roll = (float) Math.toDegrees(orientationAngles[2]);
-
-        Log.i("render", "pitch: " + pitch + " roll: " + roll);
-
         // Set the camera position (View matrix)
         Matrix.setLookAtM(viewMatrix, 0, 0, 0, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
-        Matrix.rotateM(viewMatrix, 0, pitch, 1.0f, 0, 0);
-        Matrix.rotateM(viewMatrix, 0, roll, 0, 1.0f, 0);
+        float[] distance = MainActivity.getDistance();
+
+        if(count > 100) {
+            Matrix.translateM(viewMatrix, 0, -distance[0], -distance[1], distance[2]);
+        }
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
         // Draw shape
         mTriangle.draw(vPMatrix);
+
+        count++;
     }
 
     public void onSurfaceChanged(GL10 unused, int width, int height) {
