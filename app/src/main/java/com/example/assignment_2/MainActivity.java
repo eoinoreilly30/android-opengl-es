@@ -81,7 +81,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         SensorManager.getOrientation(rotationMatrix, orientationAngles);
 
-        gLView.requestRender();
+//        gLView.requestRender();
 
         Log.i("sensor", "azimuth: " + orientationAngles[0] + " pitch: " + orientationAngles[1]
             + " roll: " + orientationAngles[2]);
@@ -109,7 +109,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             // Set the Renderer for drawing on the GLSurfaceView
             setRenderer(renderer);
             // Render the view only when there is a change in the drawing data
-            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+//            setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         }
     }
 }
